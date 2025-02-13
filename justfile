@@ -19,6 +19,7 @@ dump-icon-sprites:
 sync-icon-sprites:
     mkdir -p {{justfile_directory()}}/script-output/
     rsync -av {{script_output_home}}/script-output/ {{justfile_directory()}}/script-output/
+    npm install
     npm run optimize:images
 
 echo_command := env('ECHO_COMMAND', "echo")

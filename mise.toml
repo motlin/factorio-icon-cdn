@@ -1,0 +1,4 @@
+[tools]
+node = "22.13.1"
+npm = "latest"
+"npm:tsx" = "4.19.2"
