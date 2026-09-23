@@ -12,17 +12,21 @@ script_output_home := env('FACTORIO_SCRIPT_OUTPUT_HOME')
 
 # `factorio --verbose --dump-icon-sprites`
 dump-icon-sprites:
-    rm -rf {{script_output_home}}/script-output/
-    mkdir -p {{script_output_home}}/script-output/
-    {{factorio_home}}/factorio --verbose --dump-icon-sprites
-    echo '{{script_output_home}}/script-output/'
-    ls {{script_output_home}}/script-output/
+    rm -rf {{ script_output_home }}/script-output/
+    mkdir -p {{ script_output_home }}/script-output/
+    {{ factorio_home }}/factorio --verbose --dump-icon-sprites
+    echo '{{ script_output_home }}/script-output/'
+    ls {{ script_output_home }}/script-output/
 
 # `rsync` script-output
 sync-icon-sprites:
-    mkdir -p {{justfile_directory()}}/script-output/
-    rsync -av {{script_output_home}}/script-output/ {{justfile_directory()}}/script-output/
+    mkdir -p {{ justfile_directory() }}/script-output/
+    rsync -av {{ script_output_home }}/script-output/ {{ justfile_directory() }}/script-output/
     npm install
     npm run optimize:images
 
 echo_command := env('ECHO_COMMAND', "echo")
+
+# pre-commit run just-fmt --all-files
+format:
+    pre-commit run just-fmt --all-files
