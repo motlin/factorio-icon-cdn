@@ -1,0 +1,27 @@
+# Jobs that run on merge_group, meaning they must pass before changes land. They also run on pull_request.
+
+on:
+  pull_request:
+  merge_group:
+
+permissions:
+  contents: read
+
+jobs:
+  # Check if the new commits in a Pull Request contain a merge commit. If so, fail and print them out.
+  forbid-merge-commits:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: motlin/forbid-merge-commits-action@e3c5d3f2eac047da10def5c0b7c2d26e09540472 # main
+
+  all-checks:
+    name: All checks
+    if: ${{ !cancelled() }}
+    needs: [forbid-merge-commits]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # release/v1
+        with:
+          allowed-skips: forbid-merge-commits
+          jobs: ${{ toJSON(needs) }}
